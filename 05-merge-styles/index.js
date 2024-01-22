@@ -10,7 +10,7 @@ async function main() {
     join(__dirname, 'project-dist', 'bundle.css'),
   );
 
-  files.forEach(async (file) => {
+  files.forEach((file) => {
     if (!file.isFile() || !file.name.endsWith('.css')) return;
 
     const stream = createReadStream(join(file.path, file.name));
