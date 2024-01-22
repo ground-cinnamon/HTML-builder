@@ -62,12 +62,18 @@ async function bundleHtml() {
   let finalTemplate = templateString;
 
   for (const tag of tags) {
-    const component = await readFile(
-      join(__dirname, 'components', `${tag.replace(/{|{|}|}/g, '')}.html`),
-      'utf-8',
-    );
-    const componentString = component.toString();
-    finalTemplate = finalTemplate.replaceAll(tag, componentString);
+    try {
+      const component = await readFile(
+        join(__dirname, 'components', `${tag.replace(/{|{|}|}/g, '')}.html`),
+        'utf-8',
+      );
+      const componentString = component.toString();
+      finalTemplate = finalTemplate.replaceAll(tag, componentString);
+    } catch {
+      throw new Error(
+        'Error during build, check that all files in `components` folder is a `html` files',
+      );
+    }
   }
 
   await writeFile(join(__dirname, projectDist, 'index.html'), finalTemplate);
